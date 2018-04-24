@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+    <div class="products">
+        {% for product in products %}
+            <div class="product">
+                {% thumbnail product.image "100x100" crop="100%" format="PNG" as im %}
+                        <img src="{{ im.url }}">
+                {% endthumbnail %}
+                <div class="info">
+                        {{ product.name }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h1>اضافه کردن محصول جدید</h1>
+    <div class="product-form">
+        <form action="." method="post" enctype="multipart/form-data">
+            {{ product_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="افزودن محصول جدید"></p>
+        </form>
+    </div>
+
+{% endblock %}

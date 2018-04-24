@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}خانه {% endblock %}
+{% block content %}
+<div id="home-content">
+    <div id="product-list">
+        <h1>انبـــــــار</h1>
+        {% include "account/product_ajax.html" %}
+    </div>
+    <div id="trans-list">
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block domready %}
+var product_page = 1;
+var empty_page = false;
+var block_request = false;
+$(window).scroll(function() {
+    var margin = $(document).height() - $(window).height() - 200;
+    if ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
+        block_request = true;
+        product_page += 1;
+        $.get('?product_page=' + product_page, function(data) {
+            if(data == '') {
+                empty_page = true;
+            }
+            else {
+                block_request = false;
+                $('#product-list').append(data);
+            }
+        });
+    }
+});
+{% endblock %}

@@ -1,0 +1,67 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{% static "css/base.css" %}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="header">
+            <span class="user">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url "logout" %}" class="log-out">خروج</a>
+                {% else %}
+                    <a href="{% url "login" %}" class="log-in">ورود</a>
+                {% endif %}
+            </span>
+            {% if request.user.is_authenticated %}
+                <ul class="menu">
+                    <li class="home" {% if section == "dashboard" %}id="selected"{% endif %}><a
+                        href="{% url "dashboard" %}">خانه</a>
+                    </li>
+                    <li class="head-stor" {% if section == "storage" %}id="selected"{% endif %}>
+                        <a href="{% url "shop:storage" %}">انبار </a>
+                    </li>
+                    <li class="head-stat" {% if section == "statistic" %}id="selected"{% endif %}><a
+                        href="{% url "shop:statistic" %}">آمار</a>
+                    </li>
+                </ul>
+                <span class="total-stat">فروش کل : 125.252.215</span>
+            {% endif %}
+        </div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">
+                        {{ message|safe }}
+                        <a href="#" class="close">✖</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src=" http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js "></script>
+        <script>
+        var csrftoken = $.cookie('csrftoken');
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+            $(document).ready(function(){
+                {% block domready %}
+                {% endblock %}
+            });
+        </script>
+    </body>

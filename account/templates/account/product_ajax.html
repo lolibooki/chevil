@@ -1,0 +1,24 @@
+{% load thumbnail %}
+
+{% for product in products %}
+    <div class="product">
+        {% thumbnail product.image "80x80" crop="100%" format="PNG" as im %}
+                <img src="{{ im.url }}">
+        {% endthumbnail %}
+        <div class="info">
+            {{ product.name }}
+        </div>
+        <div class="price">
+            {{ product.price }}
+            <p> تومان</p>
+        </div>
+        <div class="count">
+            {{ product.count }}
+            <p> عدد </p>
+        </div>
+        <div class="number">
+            {{ product.number }}
+            <p>کدمحصول</p>
+        </div>
+    </div>
+{% endfor %}
